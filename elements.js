@@ -1,12 +1,12 @@
 var nimilista = []
 var lomake = document.forms['input']
 var textinput = document.querySelector('#textinput').value
-var lista = document.getElementById('kaverilista')
-var poista = document.getElementById('poista')
-var järjestä = document.getElementById('järjestä')
-lomake.addEventListener('submit', lisääListaan)
-poista.addEventListener('click', containerRemove)
-jarjesta.addEventListener('click', containerSort)
+var lista = document.getElementById('kaverilista');
+var poista = document.getElementById('poista');
+var järjestä = document.getElementById('järjestä');
+lomake.addEventListener('submit', lisääListaan);
+poista.addEventListener('click', containerRemove);
+järjestä.addEventListener('click', containerSort);
 
 function lisääListaan(event) {
     textinput = document.querySelector('#textinput').value
@@ -43,13 +43,21 @@ function containerRemove() {
 function containerSort() {
     if (nimilista.length < 1) {
         alert('Lista tyhjä!')
+        return;
     }
-    if (nimilista.length < lista.childNodes.length) {
-        lista.removeChild(lista.childNodes[0])
-    }
-    nimilista.sort();
-    for (i = 0; i < nimilista.length; i++) {
-        lista.childNodes[i].textContent = nimilista[i]
+    nimilista.sort(function(a, b) {
+        return a.localeCompare(b, { locale: 'en' });
+    });
+
+
+    while (lista.firstChild) {
+        lista.removeChild(lista.firstChild);
     }
 
+    nimilista.forEach(function(item) {
+        let uusiItem = document.createElement('LI');
+        let itemContent = document.createTextNode(item);
+        uusiItem.appendChild(itemContent);
+        lista.appendChild(uusiItem);
+    });
 }
